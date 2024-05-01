@@ -43,7 +43,13 @@ public class PlayerOneMovement : MonoBehaviour
         PlayerJumpBackwards,
         ComeDown,
         ComeDownForwards,
-        ComeDownBackwards
+        ComeDownBackwards,
+        PlayerJab,
+        PlayerStraight,
+        PlayerCross,
+        PlayerHook,
+        PlayerUppercut,
+        WaitForAnimations
     }
     void Start()
     {
@@ -63,6 +69,8 @@ public class PlayerOneMovement : MonoBehaviour
     void Update()
     {
         ApplyGravity();
+
+        AttackInputManager();
 
         if (Input.GetAxis("Horizontal") < _controllerDeadZoneNeg )
         {
@@ -123,6 +131,30 @@ public class PlayerOneMovement : MonoBehaviour
 
                 case PlayerOneStates.ComeDownBackwards:
                     ComeDown();
+                    break;
+
+                case PlayerOneStates.PlayerJab:
+                    PlayerJab();
+                    break;
+
+                case PlayerOneStates.PlayerStraight:
+                    PlayerStraight();
+                    break;
+
+                case PlayerOneStates.PlayerCross:
+                    PlayerCross();
+                    break;
+
+                case PlayerOneStates.PlayerHook:
+                    PlayerHook();
+                    break;
+
+                case PlayerOneStates.PlayerUppercut:
+                    PlayerUppercut();
+                    break;
+
+                case PlayerOneStates.WaitForAnimations:
+                    WaitForAnimations();
                     break;
             }
             yield return null; // Pause the coroutine to allow other operations
@@ -193,11 +225,37 @@ public class PlayerOneMovement : MonoBehaviour
     private void PlayerJumpForwards()
     {
         Debug.Log("PlayerJumpForwards");
+
+        PlayerJumpAnim();
+
+        _playerOneMoveDirection = new Vector3(-_playerJumpHorizontal, _playerJumpSpeed, 0);
+        _playerOneMoveDirection = _playerOneTransform.TransformDirection(_playerOneMoveDirection);
+        _playerOneMoveDirection *= _playerJumpSpeed;
+
+        _collisionFlags = _playerController.Move(_playerOneMoveDirection * Time.deltaTime);
+
+        if (_playerOneTransform.transform.position.y >= _playerJumpHeight)
+        {
+            _playerOneStates = PlayerOneMovement.PlayerOneStates.ComeDownForwards;
+        }
     }
 
     private void PlayerJumpBackwards()
     {
         Debug.Log("PlayerJumpBackwards");
+
+        PlayerJumpAnim();
+
+        _playerOneMoveDirection = new Vector3(+_playerJumpHorizontal, _playerJumpSpeed, 0);
+        _playerOneMoveDirection = _playerOneTransform.TransformDirection(_playerOneMoveDirection);
+        _playerOneMoveDirection *= _playerJumpSpeed;
+
+        _collisionFlags = _playerController.Move(_playerOneMoveDirection * Time.deltaTime);
+
+        if (_playerOneTransform.transform.position.y >= _playerJumpHeight)
+        {
+            _playerOneStates = PlayerOneMovement.PlayerOneStates.ComeDownBackwards;
+        }
     }
 
     private void ComeDown()
@@ -217,11 +275,43 @@ public class PlayerOneMovement : MonoBehaviour
     private void ComeDownForwards()
     {
         Debug.Log("ComeDownForwads");
+
+        _playerOneMoveDirection = new Vector3(-_playerJumpHorizontal, _playersSpeedYAxis, 0);
+        _playerOneMoveDirection = _playerOneTransform.TransformDirection(_playerOneMoveDirection);
+
+        _collisionFlags = _playerController.Move(_playerOneMoveDirection * Time.deltaTime);
+
+        if(PlayerIsGrounded())
+            _playerOneStates =
+            PlayerOneMovement.PlayerOneStates.PlayerOneIdle;
     }
 
     private void ComeDownBackwards()
     {
         Debug.Log("ComeDownBackwards");
+
+        _playerOneMoveDirection = new Vector3(+_playerJumpHorizontal, _playersSpeedYAxis, 0);
+        _playerOneMoveDirection = _playerOneTransform.TransformDirection(_playerOneMoveDirection);
+
+        _collisionFlags = _playerController.Move(_playerOneMoveDirection * Time.deltaTime);
+
+        if(PlayerIsGrounded())
+            _playerOneStates =
+            PlayerOneMovement.PlayerOneStates.PlayerOneIdle;
+    }
+
+    private void WaitForAnimations()
+    {
+        Debug.Log("WaitForAnimations");
+
+        for (int pa = 0; pa < _playerAttackAnim.Length; pa++)
+        {
+            if (_playerOneAnim.IsPlaying(_playerAttackAnim[pa].name))
+                return;
+        }
+
+        _playerOneStates =
+            PlayerOneMovement.PlayerOneStates.PlayerOneIdle;
     }
 
     private void PlayerBlock()
@@ -284,6 +374,115 @@ public class PlayerOneMovement : MonoBehaviour
         Debug.Log("PlayerJump");
 
         _playerOneAnim.CrossFade(_playerOneJumpAnim.name);
+    }
+
+
+    private void PlayerJabAnim()
+    {
+        Debug.Log("PlayerJabAnim");
+
+        _playerOneAnim.CrossFade(_playerAttackAnim[0].name);
+    }
+
+    private void PlayerStraightAnim()
+    {
+        Debug.Log("PlayerHighPunchAnim");
+
+        _playerOneAnim.CrossFade(_playerAttackAnim[1].name);
+    }
+
+    private void PlayerCrossAnim()
+    {
+        Debug.Log("PlayerCrossAnim");
+
+        _playerOneAnim.CrossFade(_playerAttackAnim[2].name);
+    }
+
+    private void PlayerUppercutAnim()
+    {
+        Debug.Log("PlayerUppercutAnim");
+
+        _playerOneAnim.CrossFade(_playerAttackAnim[3].name);
+    }
+
+    
+
+    private void PlayerHookAnim()
+    {
+        Debug.Log("PlayerHookAnim");
+
+        _playerOneAnim.CrossFade(_playerAttackAnim[4].name);
+    }
+
+    private void PlayerJab()
+    {
+        Debug.Log("PlayerJab");
+
+        PlayerJabAnim();
+
+        _playerOneStates =
+            PlayerOneMovement.PlayerOneStates.WaitForAnimations;
+    }
+
+    private void PlayerStraight()
+    {
+        Debug.Log("PlayerStraight");
+
+        PlayerStraightAnim();
+
+        _playerOneStates =
+            PlayerOneMovement.PlayerOneStates.WaitForAnimations;
+    }
+
+    private void PlayerCross()
+    {
+        Debug.Log("PlayerCross");
+
+        PlayerCrossAnim();
+
+        _playerOneStates =
+            PlayerOneMovement.PlayerOneStates.WaitForAnimations;
+    }
+
+    private void PlayerUppercut()
+    {
+        Debug.Log("PlayerUppercut");
+
+        PlayerUppercutAnim();
+
+        _playerOneStates =
+            PlayerOneMovement.PlayerOneStates.WaitForAnimations;
+    }
+
+    private void PlayerHook()
+    {
+        Debug.Log("PlayerHook");
+
+        PlayerHookAnim();
+
+        _playerOneStates =
+            PlayerOneMovement.PlayerOneStates.WaitForAnimations;
+    }
+
+    private void AttackInputManager()
+    {
+        Debug.Log("AttackInputManager");
+
+        if (Input.GetButtonDown("Fire1"))
+            _playerOneStates =
+            PlayerOneMovement.PlayerOneStates.PlayerJab;
+
+        if (Input.GetButtonDown("Fire2"))
+            _playerOneStates =
+            PlayerOneMovement.PlayerOneStates.PlayerUppercut;
+
+        if (Input.GetButtonDown("Fire3"))
+            _playerOneStates =
+            PlayerOneMovement.PlayerOneStates.PlayerCross;
+
+        if (Input.GetButtonDown("Fire4"))
+            _playerOneStates =
+            PlayerOneMovement.PlayerOneStates.PlayerHook;
     }
 
     private void ApplyGravity()
