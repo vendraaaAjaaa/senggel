@@ -160,6 +160,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerWalkSpeed: 1
   _playerRetreatSpeed: 0.75
+  _playerJumpHeight: 5
+  _playerJumpSpeed: 5
+  _playerJumpHorizontal: 5
   _playerOneIdleAnim: {fileID: -203655887218126122, guid: 300e1c472d4a5e446aa9d9cacc408740, type: 3}
   _playerOneWalkAnim: {fileID: -203655887218126122, guid: 56b13b7f0c4e2e745be470193610401f, type: 3}
   _playerOneBlockAnim: {fileID: 0}
+  _playerOneJumpAnim: {fileID: 0}
+  _playerAttackAnim: []
+  _controllerDeadZonePos: 0.1
+  _controllerDeadZoneNeg: -0.1
+  _playersGravity: 20
+  _playerGravityModifier: 5
+  _playersSpeedYAxis: 0

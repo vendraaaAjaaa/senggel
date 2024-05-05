@@ -21,7 +21,7 @@ public class PlayerOneMovement : MonoBehaviour
     public AnimationClip[] _playerAttackAnim;
 
     public float _controllerDeadZonePos = 0.1f;
-    public  float _controllerDeadZoneNeg = 0.1f;
+    public  float _controllerDeadZoneNeg = -0.1f;
 
     public float _playersGravity = 20f;
     public float _playerGravityModifier = 5f;
@@ -70,22 +70,20 @@ public class PlayerOneMovement : MonoBehaviour
     {
         ApplyGravity();
 
-        AttackInputManager();
-
-        if (Input.GetAxis("Horizontal") < _controllerDeadZoneNeg )
+        for (int a = 0; a < _playerAttackAnim.Length; a++)
         {
-            _playerOneStates = PlayerOneMovement.PlayerOneStates.PlayerWalkLeft;
+            if (_playerOneAnim.IsPlaying(_playerAttackAnim[a].name))
+                return;
         }
 
-        if (Input.GetAxis("Horizontal") > _controllerDeadZonePos )
+        if (PlayerIsGrounded()) 
         {
-            _playerOneStates = PlayerOneMovement.PlayerOneStates.PlayerWalkLeft;
+            HorizontalInputManager();
+            AttackInputManager();
+            StandartInputManager();
         }
 
-        if (Input.GetAxis("Vertical") > _controllerDeadZonePos )
-        {
-            _playerOneStates = PlayerOneMovement.PlayerOneStates.PlayerBlock;
-        }
+        
     }
 
     private IEnumerator PlayerOneFSM()
@@ -169,6 +167,17 @@ public class PlayerOneMovement : MonoBehaviour
         {
             PlayerOneIdleAnim();
         }
+
+        if (PlayerIsGrounded())
+        {
+            return;
+        }
+
+        _playerOneMoveDirection = new Vector3(0, _playersSpeedYAxis, 0);
+
+        _playerOneMoveDirection = _playerOneTransform.TransformDirection(_playerOneMoveDirection);
+
+        _collisionFlags = _playerController.Move (_playerOneMoveDirection * Time.deltaTime);
     }
     private void PlayerWalkLeft()
     {
@@ -483,6 +492,39 @@ public class PlayerOneMovement : MonoBehaviour
         if (Input.GetButtonDown("Fire4"))
             _playerOneStates =
             PlayerOneMovement.PlayerOneStates.PlayerHook;
+    }
+
+    private void HorizontalInputManager()
+    {
+        Debug.Log("HorizontalInputManager");
+
+        if (Input.GetAxis("Vertical")> _controllerDeadZonePos && Input.GetAxis("Horizontal") > _controllerDeadZoneNeg)
+            _playerOneStates =
+            PlayerOneMovement.PlayerOneStates.PlayerJumpForwards;
+
+        if (Input.GetAxis("Vertical")> _controllerDeadZonePos && Input.GetAxis("Horizontal") < _controllerDeadZoneNeg)
+            _playerOneStates =
+            PlayerOneMovement.PlayerOneStates.PlayerJumpBackwards;
+    }
+
+    private void StandartInputManager()
+    {
+        Debug.Log("StandartInputManager");
+
+        if (Input.GetAxis("Horizontal") < _controllerDeadZoneNeg )
+        {
+            _playerOneStates = PlayerOneMovement.PlayerOneStates.PlayerWalkLeft;
+        }
+
+        if (Input.GetAxis("Horizontal") > _controllerDeadZonePos )
+        {
+            _playerOneStates = PlayerOneMovement.PlayerOneStates.PlayerWalkRight;
+        }
+
+        if (Input.GetAxis("Vertical") > _controllerDeadZonePos )
+        {
+            _playerOneStates = PlayerOneMovement.PlayerOneStates.PlayerBlock;
+        }
     }
 
     private void ApplyGravity()
