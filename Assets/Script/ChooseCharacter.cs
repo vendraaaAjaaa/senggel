@@ -23,9 +23,10 @@ public class ChooseCharacter : ChooseCharacterManager
     public AudioClip _cycleCharacterButtonPress;
 
     private GameObject _characterDemo;
+    public static bool _demoPlayer;
 
     public int _characterSelectState;
-    public int _yRot = 90;
+    public int _yRot = 180;
 
     private enum CharacterSelectModels{
         BlackRobot = 0,
@@ -37,6 +38,8 @@ public class ChooseCharacter : ChooseCharacterManager
     {
         CharacterSelectManager();
 
+        _demoPlayer = true;
+
         _foregroundTextWidth = Screen.width / 1.5f;
         _foregroundTextHeight = Screen.height / 10f;
         _arrowSize = Screen.height / 10f;
@@ -45,9 +48,12 @@ public class ChooseCharacter : ChooseCharacterManager
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Fire1")){
+            _demoPlayer = false;
             GameObject.FindGameObjectWithTag("BackgroundManager").
             GetComponent<BackgroundManager>().SendMessage("SceneBackgroundLoad");
+        }
+            
 
         if (_chooseCharacterInputTimer > 0)
             _chooseCharacterInputTimer -= 1f * Time.deltaTime;

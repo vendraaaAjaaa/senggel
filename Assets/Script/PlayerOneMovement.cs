@@ -18,6 +18,7 @@ public class PlayerOneMovement : MonoBehaviour
     public AnimationClip _playerOneWalkAnim;
     public AnimationClip _playerOneBlockAnim;
     public AnimationClip _playerOneJumpAnim;
+    public AnimationClip _playerOneDemoAnim;
     public AnimationClip[] _playerAttackAnim;
 
     public float _controllerDeadZonePos = 0.1f;
@@ -26,6 +27,9 @@ public class PlayerOneMovement : MonoBehaviour
     public float _playersGravity = 20f;
     public float _playerGravityModifier = 5f;
     public float _playersSpeedYAxis;
+
+    private bool _returnDemoState;
+    private int _demoRotationValue = 75;
 
     private Vector3 _playerOneMoveDirection = Vector3.zero;
     private CollisionFlags _collisionFlags;
@@ -49,7 +53,8 @@ public class PlayerOneMovement : MonoBehaviour
         PlayerCross,
         PlayerHook,
         PlayerUppercut,
-        WaitForAnimations
+        WaitForAnimations,
+        PlayerDemo
     }
     void Start()
     {
@@ -63,6 +68,13 @@ public class PlayerOneMovement : MonoBehaviour
             _playerOneAnim[_playerAttackAnim[a].name].wrapMode = WrapMode.Once;
 
         StartCoroutine(PlayerOneFSM());
+
+        _returnDemoState = false;
+
+        _returnDemoState = ChooseCharacter._demoPlayer;
+
+        if (_returnDemoState == true)
+            _playerOneStates = PlayerOneMovement.PlayerOneStates.PlayerDemo;
     }
 
     // Update is called once per frame
@@ -153,6 +165,10 @@ public class PlayerOneMovement : MonoBehaviour
 
                 case PlayerOneStates.WaitForAnimations:
                     WaitForAnimations();
+                    break;
+
+                case PlayerOneStates.PlayerDemo:
+                    PlayerDemo();
                     break;
             }
             yield return null; // Pause the coroutine to allow other operations
@@ -329,6 +345,17 @@ public class PlayerOneMovement : MonoBehaviour
         PlayerBlockAnim();
     }
 
+    private void PlayerDemo()
+    {
+        Debug.Log("PlayerDemo");
+        PlayerDemoAnimation();
+
+        if (Input.GetAxis("LeftTrigger") > 0.1f)
+            transform.Rotate(Vector3.up * _demoRotationValue * Time.deltaTime);
+
+        if (Input.GetAxis("RightTrigger") > 0.1f)
+            transform.Rotate(Vector3.down * _demoRotationValue * Time.deltaTime);
+    }
     private void PlayerOneIdleAnim()
     {
         Debug.Log("PlayerOneIdleAnim");
@@ -471,6 +498,11 @@ public class PlayerOneMovement : MonoBehaviour
 
         _playerOneStates =
             PlayerOneMovement.PlayerOneStates.WaitForAnimations;
+    }
+
+    private void PlayerDemoAnimation()
+    {
+        _playerOneAnim.CrossFade(_playerOneDemoAnim.name);
     }
 
     private void AttackInputManager()
