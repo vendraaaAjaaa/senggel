@@ -10,12 +10,14 @@ public class ChooseCharacter : ChooseCharacterManager
     public Texture2D _selectCharacterTextForeground;
     public Texture2D _selectCharacterText;
 
-    public Texture2D _selectCharacterArrowLeft;
-    public Texture2D _selectCharacterArrowRight;
+    public Texture2D _selectCharacterXboxLeft;
+    public Texture2D _selectCharacterXboxRight;
+    public Texture2D _selectCharacterPS4Left;
+    public Texture2D _selectCharacterPS4Right;
 
     private float _foregroundTextWidth;
     private float _foregroundTextHeight;
-    private float _arrowSize;
+    private float _leftRightControllerIconSize;
     
     public float _chooseCharacterInputTimer;
     public float _chooseCharacterInputDelay = 1f;
@@ -42,7 +44,7 @@ public class ChooseCharacter : ChooseCharacterManager
 
         _foregroundTextWidth = Screen.width / 1.5f;
         _foregroundTextHeight = Screen.height / 10f;
-        _arrowSize = Screen.height / 10f;
+        _leftRightControllerIconSize = Screen.height / 10f;
     }
 
     // Update is called once per frame
@@ -204,17 +206,37 @@ public class ChooseCharacter : ChooseCharacterManager
             _foregroundTextWidth, _foregroundTextHeight),
             _selectCharacterText);
 
-        GUI.DrawTexture (new Rect (
-            Screen.width / 2 - (_foregroundTextWidth / 2) -
-            _arrowSize,
-            0,
-            _arrowSize, _arrowSize),
-            _selectCharacterArrowLeft);
+        if (GameObject.FindGameObjectWithTag("ControllerManager").GetComponent<ControllerManager>()._xBOXController == true)
+        {
+            GUI.DrawTexture (new Rect (
+                Screen.width / 2 - (_foregroundTextWidth / 2) -
+                _leftRightControllerIconSize,
+                0,
+                _leftRightControllerIconSize, _leftRightControllerIconSize),
+                _selectCharacterXboxLeft);
 
-        GUI.DrawTexture (new Rect (
-            Screen.width / 2 + (_foregroundTextWidth / 2),
-            0,
-            _arrowSize, _arrowSize),
-            _selectCharacterArrowRight);
+            GUI.DrawTexture (new Rect (
+                Screen.width / 2 + (_foregroundTextWidth / 2),
+                0,
+                _leftRightControllerIconSize, _leftRightControllerIconSize),
+                _selectCharacterXboxRight);
+        }
+
+        if (GameObject.FindGameObjectWithTag("ControllerManager").GetComponent<ControllerManager>()._pS4Controller == true)
+        {
+            GUI.DrawTexture (new Rect (
+                Screen.width / 2 - (_foregroundTextWidth / 2) -
+                _leftRightControllerIconSize,
+                0,
+                _leftRightControllerIconSize, _leftRightControllerIconSize),
+                _selectCharacterPS4Left);
+
+            GUI.DrawTexture (new Rect (
+                Screen.width / 2 + (_foregroundTextWidth / 2),
+                0,
+                _leftRightControllerIconSize, _leftRightControllerIconSize),
+                _selectCharacterPS4Right);
+        }
+        
     }
 }
