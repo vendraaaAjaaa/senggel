@@ -27,8 +27,12 @@ public class ChooseCharacter : ChooseCharacterManager
     private GameObject _characterDemo;
     public static bool _demoPlayer;
 
+    private int _pickRandomCharacter;
+
     public int _characterSelectState;
     public int _yRot = 180;
+
+    private GameObject _switchCharacterParticleSystem;
 
     private enum CharacterSelectModels{
         BlackRobot = 0,
@@ -71,6 +75,10 @@ public class ChooseCharacter : ChooseCharacterManager
             GetComponent<AudioSource>().PlayOneShot(_cycleCharacterButtonPress);
 
             _characterSelectState--;
+
+            _switchCharacterParticleSystem = Instantiate(Resources.Load("SwitchCharParticle")) as GameObject;
+            _switchCharacterParticleSystem.transform.position = new Vector3(-0.5f, 0, -8);
+
             CharacterSelectManager();
 
             _chooseCharacterInputTimer = _chooseCharacterInputDelay;
@@ -82,9 +90,27 @@ public class ChooseCharacter : ChooseCharacterManager
                 return;
 
             _characterSelectState++;
+
+            _switchCharacterParticleSystem = Instantiate(Resources.Load("SwitchCharParticle")) as GameObject;
+            _switchCharacterParticleSystem.transform.position = new Vector3(-0.5f, 0, -8);
+            
             CharacterSelectManager();
 
             _chooseCharacterInputTimer = _chooseCharacterInputDelay;
+        }
+
+        if (Input.GetButtonDown("Select"))
+        {
+            _pickRandomCharacter = Random.Range(0, 3);
+
+            _characterSelectState = _pickRandomCharacter;
+
+            GetComponent<AudioSource>().PlayOneShot(_cycleCharacterButtonPress);
+
+            _switchCharacterParticleSystem = Instantiate(Resources.Load("SwitchCharParticle")) as GameObject;
+            _switchCharacterParticleSystem.transform.position = new Vector3(-0.5f, 0, -8);
+
+            CharacterSelectManager();
         }
     }
 
