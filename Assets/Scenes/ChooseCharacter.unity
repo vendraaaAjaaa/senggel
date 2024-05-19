@@ -326,13 +326,15 @@ MonoBehaviour:
   _selectCharacterTextBackground: {fileID: 0}
   _selectCharacterTextForeground: {fileID: 2800000, guid: 065fecf268292f24bbcd0fdec6b9de75, type: 3}
   _selectCharacterText: {fileID: 2800000, guid: 6fc4abb3928e88d45bef1f5a408fccee, type: 3}
-  _selectCharacterArrowLeft: {fileID: 2800000, guid: f878a0bd445b0cd4aaef3390434d3d1e, type: 3}
-  _selectCharacterArrowRight: {fileID: 2800000, guid: 68429b57a72959f459978bc556884155, type: 3}
+  _selectCharacterXboxLeft: {fileID: 0}
+  _selectCharacterXboxRight: {fileID: 0}
+  _selectCharacterPS4Left: {fileID: 0}
+  _selectCharacterPS4Right: {fileID: 0}
   _chooseCharacterInputTimer: 0
   _chooseCharacterInputDelay: 1
   _cycleCharacterButtonPress: {fileID: 0}
   _characterSelectState: 0
-  _yRot: 90
+  _yRot: 180
 --- !u!82 &1252726434
 AudioSource:
   m_ObjectHideFlags: 0

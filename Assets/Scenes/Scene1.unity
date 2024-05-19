@@ -324,10 +324,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 121ce4b52bb075045be23e276cfca04a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _roundOneText: {fileID: 0}
-  _roundTwoText: {fileID: 0}
-  _roundThreeText: {fileID: 0}
-  _fightText: {fileID: 0}
+  _roundOneText: {fileID: 2800000, guid: 5045bd1b70790164cbd2d8149fd915d1, type: 3}
+  _roundTwoText: {fileID: 2800000, guid: 7794d0b7c608a4f49975e5973ca6e745, type: 3}
+  _roundThreeText: {fileID: 2800000, guid: 801e6b265f4049843a06c77decf97171, type: 3}
+  _fightText: {fileID: 2800000, guid: 84a1d74d10554604ea1c7e2b4bd09ca3, type: 3}
   _roundOneAnnouncement: {fileID: 0}
   _roundTwoAnnouncement: {fileID: 0}
   _roundThreeAnnouncement: {fileID: 0}
