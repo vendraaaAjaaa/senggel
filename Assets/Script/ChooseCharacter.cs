@@ -139,11 +139,11 @@ public class ChooseCharacter : ChooseCharacterManager
 
     private void BlackRobot()
     {
-        Debug.Log("BlackRobot");
+        Debug.Log("HumanGreen");
 
         DestroyObject (_characterDemo);
 
-        _characterDemo = Instantiate (Resources.Load("BlackRobot"))
+        _characterDemo = Instantiate (Resources.Load("HumanGreen"))
             as GameObject;
 
         _characterDemo.transform.position = new Vector3 (-0.5f, 0,-7);
@@ -158,11 +158,11 @@ public class ChooseCharacter : ChooseCharacterManager
 
     private void WhiteRobot()
     {
-        Debug.Log("WhiteRobot");
+        Debug.Log("HumanYellow");
 
         DestroyObject (_characterDemo);
 
-        _characterDemo = Instantiate (Resources.Load("WhiteRobot"))
+        _characterDemo = Instantiate (Resources.Load("HumanYellow"))
             as GameObject;
 
         _characterDemo.transform.position = new Vector3 (-0.5f, 0,-7);
@@ -177,11 +177,11 @@ public class ChooseCharacter : ChooseCharacterManager
 
     private void RedRobot()
     {
-        Debug.Log("RedRobot");
+        Debug.Log("HumanPurple");
 
         DestroyObject (_characterDemo);
 
-        _characterDemo = Instantiate (Resources.Load("RedRobot"))
+        _characterDemo = Instantiate (Resources.Load("HumanPurple"))
             as GameObject;
 
         _characterDemo.transform.position = new Vector3 (-0.5f, 0,-7);
@@ -196,11 +196,11 @@ public class ChooseCharacter : ChooseCharacterManager
 
     private void BlueRobot()
     {
-        Debug.Log("BlueRobot");
+        Debug.Log("HumanBlue");
 
         DestroyObject (_characterDemo);
 
-        _characterDemo = Instantiate (Resources.Load("BlueRobot"))
+        _characterDemo = Instantiate (Resources.Load("HumanBlue"))
             as GameObject;
 
         _characterDemo.transform.position = new Vector3 (-0.5f, 0,-7);
